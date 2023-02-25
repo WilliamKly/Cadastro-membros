@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { ScreenHeader } from "@components/ScreenHeader";
-import {  VStack, FlatList } from "native-base";
+import { RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native'
+import {  VStack, FlatList, Text, View } from "native-base";
 import { useFocusEffect } from '@react-navigation/native';
 import { api } from '@services/api';
 import { MyCard } from '@components/Card';
+import usePagination from 'react-native-flatlist-pagination-hook';
 
 interface Member {
   id: number;
@@ -37,59 +39,63 @@ interface Member {
 }
 
 interface ApiResponse {
-  Membros: Member[];
+  current_page: number;
+  data: Member[];
 }
 
 export function Members() {
   const [membros, setMembros] = useState<ApiResponse>()
+  const [page, setPage] = useState(1);
+  //const [params, setParams] = useState({page: 1})
+  const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false)
+  const [lastId, setLastId] = useState(0)
 
   async function fetchMembros() {
     try {
-      const response = await api.get('/api/membros/all')
-      setMembros(response.data)
-      //console.log(response.data)
+      setIsLoading(true)
+      setRefresh(true)
+      const response = await api.get(`/api/membros/all?page=${page}`)
+      const data = await response.data.Membros;
+      setMembros({ ...data, data: [...membros?.data ?? [], ...data.data] });
+      setIsLoading(false)
+      setRefresh(false)
     } catch(error) {
+      setIsLoading(false)
       console.log(error)
     }
   }
 
-  useFocusEffect(useCallback(() => {
+  useEffect(() => {
     fetchMembros()
-  }, []))
+  }, [page])
 
   return (
     <VStack flex={1}>
       <ScreenHeader title='Membros cadastrados' />
 
-      {/* <SectionList
-        sections={exercises}
-        keyExtractor={item => item}
-        renderItem={({ item }) => (
-          <HistoryCard />
-        )}
-        renderSectionHeader={({ section }) => (
-          <Heading color='gray.200' fontSize='md' mt={10} mb={3} fontFamily='heading'>
-            {section.title}
-          </Heading>
-        )}
-        px={8}
-        contentContainerStyle={exercises.length === 0 && { flex: 1, justifyContent: 'center' }}
-        ListEmptyComponent={() => (
-          <Text color='gray.100' textAlign='center'>
-            Não há exercícios registrados ainda. {'\n'}
-            Vamos fazer exercícios hoje?
-          </Text>
-        )}
-        showsVerticalScrollIndicator={false}
-      /> */}
-
     <FlatList
-      data={membros?.Membros ?? []}
-      renderItem={({ item }) => (
-        <MyCard barrio={item.barrio} nome_membro={item.nome_membro} />
+      data={membros?.data ?? []}
+      renderItem={({ item, index }) => (
+        <MyCard key={item?.id} barrio={item.barrio} nome_membro={item.nome_membro} />
           // <Text color='white'>{item.nome_membro}</Text>
       )}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => item?.id?.toString()}
+      refreshControl={
+        <RefreshControl
+          refreshing={refresh}
+          onRefresh={() => setPage(1)}
+          tintColor='white'
+          colors={['white']}
+        />
+      }
+      onEndReached={() => {
+        if (!refresh) {
+          setPage(page + 1)
+        }
+      }}
+      onEndReachedThreshold={0.1}
+      ListFooterComponent={() => refresh ? <ActivityIndicator style={{ marginVertical: 20 }} /> : <View style={{height: 50}} />}
     />
 
     </VStack>
