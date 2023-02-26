@@ -75,7 +75,7 @@ export function Home() {
   async function handleUsePhotoSelect() {
     setPhotoIsLoading(true)
     try{
-      const photoSelected = await ImagePicker.launchCameraAsync({
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
         aspect: [4, 4],

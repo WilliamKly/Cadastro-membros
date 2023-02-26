@@ -110,8 +110,8 @@ export function Members() {
         <MyCard
           key={item?.id}
           id={item?.id}
-          barrio={item.barrio}
-          nome_membro={item.nome_membro}
+          barrio={item?.barrio}
+          nome_membro={item?.nome_membro}
           onPress={() => handleMemberPress(item.id.toString())}
           />
           // <Text color='white'>{item.nome_membro}</Text>
@@ -130,8 +130,8 @@ export function Members() {
       //     handleLoadMore();
       //   }
       // }}
-      onEndReachedThreshold={0.5}
-      ListFooterComponent={() => refresh ? <ActivityIndicator style={{ marginVertical: 20 }} /> : <View style={{height: 50}} />}
+      // onEndReachedThreshold={0.5}
+      // ListFooterComponent={() => refresh ? <ActivityIndicator style={{ marginVertical: 20 }} /> : <View style={{height: 50}} />}
     />
 
     </VStack>

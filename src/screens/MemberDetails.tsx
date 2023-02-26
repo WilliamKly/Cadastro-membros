@@ -3,12 +3,13 @@ import { AppNavigatorRoutesProps } from "@routes/app.routes";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
 import { Card, Heading, HStack, Icon, Image, ScrollView, Text, useToast, View, VStack } from "native-base";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
 import { Loading } from "@components/Loading";
 import { decode } from 'react-native-base64';
 import { UserPhoto } from "@components/UserPhoto";
+import { Button } from "@components/Button";
 
 interface Member {
   id: number;
@@ -71,6 +72,7 @@ export function MemberDetails() {
       setIsLoading(true)
       const response = await api.get(`/api/membros/find/${memberId}`)
       setMembros(response.data)
+      navigation.navigate('members')
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError ? error.mensagem : 'Não foi possível carregar os detalhes do exercício.'
@@ -85,7 +87,24 @@ export function MemberDetails() {
     }
   }
 
-  const base64Image = membros?.image
+  async function onExcluirMembro(memberId: string) {
+    try {
+      setIsLoading(true)
+      const response = await api.delete(`/api/membros/find/${memberId}`)
+      
+    } catch(error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError ? error.mensagem : 'Não foi possível carregar os detalhes do exercício.'
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500'
+      })
+    }
+  }
+
+  let base64Image = membros?.image
 
   useEffect(() => {
     fetchExerciseDetails()
@@ -121,7 +140,7 @@ export function MemberDetails() {
             <Text>{membros?.nome_membro}</Text>
           </Heading>
               {
-                membros?.image && <UserPhoto position='absolute' top={2} right={2} size={24} alt="Imagem do membro" source={{ uri: `data:image/png;base64,${base64Image}` }} />
+                membros?.image && <UserPhoto position='absolute' top={2} right={2} size={24} alt="Imagem do membro" source={{ uri: `data:image/png;base64,${base64Image}` }}/>
               }
               <Text mt={70}>ID: {membros?.id}</Text>
               <Text>__________________________________</Text>
@@ -150,6 +169,7 @@ export function MemberDetails() {
               <Text>Sexo: {membros?.sexo}</Text>
           </Card>
       </View>
+      <Button title="Excluir membro" onPress={() => onExcluirMembro(memberId)} />
           </VStack>
         </ScrollView>
       }
