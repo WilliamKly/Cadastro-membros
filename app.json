@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "igniteGym",
-    "slug": "igniteGym",
+    "slug": "igrejacad",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +20,8 @@
       ]
     ],
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/cf88c75c-9d12-40d1-842a-88a8d07133f8"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -32,10 +33,23 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.willkly.igrejacad"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8e3302f9-441e-4c38-a8bd-76d3d84b07ea"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "owner": "willklywerston"
   }
 }

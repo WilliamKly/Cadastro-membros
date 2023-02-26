@@ -6,11 +6,11 @@ import HomeSvg from '@assets/home.svg'
 import HistorySvg from '@assets/history.svg'
 import { Members } from '@screens/Members'
 import { Home } from '@screens/Home'
-
+import { MemberDetails } from '@screens/MemberDetails'
 
 type AppRoutes = {
   home: undefined;
-  exercise: undefined;
+  memberDetails: {memberId: string};
   profile: undefined;
   members: undefined;
 }
@@ -56,6 +56,11 @@ export function AppRoutes() {
             <HistorySvg fill={color} width={iconSize} height={iconSize} />
           )
         }}
+      />
+      <Screen
+        name='memberDetails'
+        component={MemberDetails}
+        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   )

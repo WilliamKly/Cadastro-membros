@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react'
+import { ReactNode, useCallback, useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { HomeHeader } from "@components/HomeHeader";
-import { VStack, HStack, Heading, Text, useToast, ScrollView, Select } from "native-base";
+import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton } from "native-base";
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
@@ -11,6 +11,11 @@ import { Button } from '@components/Button';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { KeyboardAvoidingView } from 'native-base';
+import { TouchableOpacity } from 'react-native'
+import { UserPhoto } from '@components/UserPhoto';
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
+import pako from 'pako';
 
 type FormData = {
   nome_membro: string;
@@ -26,6 +31,7 @@ type FormData = {
   fk_igreja: number;
   data_batismo_espirito_santo: string;
   sexo: string;
+  image?: string;
 }
 
 interface Cargo {
@@ -51,6 +57,8 @@ const signUpSchema = yup.object({
   email_dizimista: yup.string().required('Informe o e-mail.').email('E-mail inválido.'),
 })
 
+const PHOTO_SIZE = 33
+
 export function Home() {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -62,6 +70,43 @@ export function Home() {
   const [selectedIgreja, setSelectedIgreja] = useState();
   const [selectedTypeId, setSelectedTypeId] = useState("");
   const [selectedTypeIdIgreja, setSelectedTypeIdIgreja] = useState("");
+  const [photoIsLoading, setPhotoIsLoading] = useState(false)
+  const [userPhoto, setUserPhoto] = useState('http://github.com/williamKly.png')
+
+  async function handleUsePhotoSelect() {
+    setPhotoIsLoading(true)
+    try{
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true
+      })
+  
+      if(photoSelected.canceled) {
+        return
+      }
+
+      if(photoSelected.assets[0].uri){
+        const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+        
+        if(photoInfo.size && (photoInfo.size / 1024 / 1024) > 5) {
+          return toast.show({
+            title: 'Essa imagem é muito grande! escolha uma de até 5mb',
+            placement: 'top',
+            bgColor: 'red.500'
+          })
+        }
+
+        setUserPhoto(photoSelected.assets[0].uri)
+      }
+  
+    } catch(err) {
+      console.log(err)
+    } finally {
+      setPhotoIsLoading(false)
+    }
+  }
   
   const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(signUpSchema)
@@ -99,9 +144,13 @@ export function Home() {
     fk_igreja,
     data_batismo_espirito_santo,
     sexo,
+    image
    }: FormData) {
     try {
       setIsLoading(true)
+
+      const base64Photo = await FileSystem.readAsStringAsync(userPhoto, { encoding: FileSystem.EncodingType.Base64 });
+
       await api.post('/api/membros/create', {
         nome_membro,
         email_dizimista,
@@ -116,6 +165,7 @@ export function Home() {
         fk_igreja: selectedIgreja,
         data_batismo_espirito_santo,
         sexo,
+        image: base64Photo.toString()
       })
 
       const title = "Membro Cadastrado com sucesso!"
@@ -355,6 +405,30 @@ export function Home() {
             )}
         />
 
+        <Center mt={6} px={10}>
+          {
+            photoIsLoading ?
+            <Skeleton
+              w={PHOTO_SIZE}
+              h={PHOTO_SIZE}
+              rounded='full'
+              startColor='gray.500'
+              endColor='gray.400'
+            />
+            :
+            <UserPhoto 
+              source={{ uri: userPhoto }}
+              alt='Foto do usuário'
+              size={PHOTO_SIZE}
+            />
+          }
+
+          <TouchableOpacity onPress={handleUsePhotoSelect}>
+            <Text color='green.500' fontWeight='bold' fontSize='md' mt={2} mb={8}>
+              Alterar foto
+            </Text>
+          </TouchableOpacity>
+        </Center>
         <Button
             title='Cadastrar membro'
             onPress={handleSubmit(handleCreate)}
