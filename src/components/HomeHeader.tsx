@@ -11,11 +11,11 @@ export function HomeHeader() {
   const { user, signOut } = useAuth()
 
   return (
-    <HStack bg='gray.600' pt={16} pb={5} px={8} alignItems='center'>
+    <HStack bg='gray.600' pt={8} pb={1} px={5} alignItems='center'>
       <UserPhoto
         source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
         alt='Imagem do usuário'
-        size={16}
+        size={12}
         mr={4}
       />
       <VStack flex={1}>
@@ -33,7 +33,7 @@ export function HomeHeader() {
           as={MaterialIcons}
           name='logout'
           color='gray.200'
-          size={7}
+          size={5}
         />
       </TouchableOpacity>
     </HStack>

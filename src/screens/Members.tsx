@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Input } from '@components/Input';
 
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Member {
   id: number;
@@ -98,11 +99,25 @@ export function Members() {
       <ScreenHeader title='Membros cadastrados' />
 
       <Input
-        value={searchTerm}
-        onChangeText={text => setSearchTerm(text)}
-        onSubmitEditing={handleSearch}
-        placeholder="Digite o nome a ser pesquisado"
-      />
+  value={searchTerm}
+  onChangeText={text => setSearchTerm(text)}
+  onSubmitEditing={handleSearch}
+  placeholder="Buscar por nome"
+  h={58}
+  px={2}
+  mb={0}
+  mt={2}
+  mx={4}
+  borderWidth={2}
+  InputLeftElement={
+    <Ionicons
+      name="search-outline"
+      size={24}
+      color="gray"
+      style={{ marginLeft: 5 }}
+    />
+  }
+/>
 
     <FlatList
       data={membros?.Membros?.filter(item => item?.nome_membro?.includes(searchTerm)) ?? []}
