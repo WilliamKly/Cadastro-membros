@@ -15,7 +15,6 @@ import { TouchableOpacity } from 'react-native'
 import { UserPhoto } from '@components/UserPhoto';
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
-import pako from 'pako';
 
 type FormData = {
   nome_membro: string;
@@ -71,16 +70,17 @@ export function Home() {
   const [selectedTypeId, setSelectedTypeId] = useState("");
   const [selectedTypeIdIgreja, setSelectedTypeIdIgreja] = useState("");
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
-  const [userPhoto, setUserPhoto] = useState('http://github.com/williamKly.png')
+  const [userPhoto, setUserPhoto] = useState('https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png')
 
   async function handleUsePhotoSelect() {
     setPhotoIsLoading(true)
     try{
-      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+      const photoSelected = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
         aspect: [4, 4],
-        allowsEditing: true
+        allowsEditing: true,
+        //mediaTypes: ImagePicker.MediaTypeOptions.All,
       })
   
       if(photoSelected.canceled) {
@@ -225,6 +225,32 @@ export function Home() {
           keyboardVerticalOffset={150}
           style={{ flex: 1 }}>
         <ScrollView>
+
+        <Center mt={6} px={10}>
+          {
+            photoIsLoading ?
+            <Skeleton
+              w={PHOTO_SIZE}
+              h={PHOTO_SIZE}
+              rounded='full'
+              startColor='gray.500'
+              endColor='gray.400'
+            />
+            :
+            <UserPhoto 
+              source={{ uri: userPhoto }}
+              alt='Foto do usuário'
+              size={PHOTO_SIZE}
+            />
+          }
+
+          <TouchableOpacity onPress={handleUsePhotoSelect}>
+            <Text color='white' fontWeight='bold' fontSize='md' mt={2} mb={8}>
+              Escolher foto do membro
+            </Text>
+          </TouchableOpacity>
+        </Center>
+
         <Controller
             control={control}
             name='nome_membro'
@@ -405,30 +431,7 @@ export function Home() {
             )}
         />
 
-        <Center mt={6} px={10}>
-          {
-            photoIsLoading ?
-            <Skeleton
-              w={PHOTO_SIZE}
-              h={PHOTO_SIZE}
-              rounded='full'
-              startColor='gray.500'
-              endColor='gray.400'
-            />
-            :
-            <UserPhoto 
-              source={{ uri: userPhoto }}
-              alt='Foto do usuário'
-              size={PHOTO_SIZE}
-            />
-          }
-
-          <TouchableOpacity onPress={handleUsePhotoSelect}>
-            <Text color='green.500' fontWeight='bold' fontSize='md' mt={2} mb={8}>
-              Alterar foto
-            </Text>
-          </TouchableOpacity>
-        </Center>
+        
         <Button
             title='Cadastrar membro'
             onPress={handleSubmit(handleCreate)}

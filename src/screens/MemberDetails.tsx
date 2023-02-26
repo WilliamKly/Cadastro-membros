@@ -8,6 +8,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
 import { Loading } from "@components/Loading";
 import { decode } from 'react-native-base64';
+import { UserPhoto } from "@components/UserPhoto";
 
 interface Member {
   id: number;
@@ -105,7 +106,7 @@ export function MemberDetails() {
 
         <HStack justifyContent='space-between' mt={4} mb={8} alignItems='center'>
           <Heading color='gray.100' fontSize='lg' flexShrink={1} fontFamily='heading'>
-            {membros?.nome_membro}
+            Informações de {membros?.nome_membro}
           </Heading>
         </HStack>
       </VStack>
@@ -119,22 +120,33 @@ export function MemberDetails() {
           <Heading>
             <Text>{membros?.nome_membro}</Text>
           </Heading>
-              <Text color='white'>ID: {membros?.id}</Text>
               {
-                membros?.image && <Image alt="Imagem do membro" source={{ uri: `data:image/png;base64,${base64Image}` }} style={{ width: 200, height: 200 }} />
+                membros?.image && <UserPhoto position='absolute' top={2} right={2} size={24} alt="Imagem do membro" source={{ uri: `data:image/png;base64,${base64Image}` }} />
               }
+              <Text mt={70}>ID: {membros?.id}</Text>
+              <Text>__________________________________</Text>
               <Text>Email: {membros?.email_dizimista}</Text>
+              <Text>__________________________________</Text>
               <Text>Cidade: {membros?.cidade}</Text>
+              <Text>__________________________________</Text>
               <Text>Bairro: {membros?.barrio}</Text>
+              <Text>__________________________________</Text>
               <Text>Endereço: {membros?.endereco}</Text>
+              <Text>__________________________________</Text>
               <Text>Telefone: {membros?.telefone}</Text>
-              <Text>Batismo em água: {membros?.batismo_agua}</Text>
+              <Text>__________________________________</Text>
+              <Text>Batismo nas águas: {membros?.batismo_agua}</Text>
+              <Text>__________________________________</Text>
               <Text>Data de nascimento: {membros?.data_nascimento}</Text>
-              <Text>Cargo: {membros?.cargo}</Text>
+              <Text>__________________________________</Text>
               <Text>Situação: {membros?.situacao}</Text>
+              <Text>__________________________________</Text>
               <Text>Igreja: {membros?.igreja?.nome_igreja}</Text>
+              <Text>__________________________________</Text>
               <Text>Tipo: {membros?.tipo?.tipo}</Text>
+              <Text>__________________________________</Text>
               <Text>Data de batismo no Espírito Santo: {membros?.data_batismo_espirito_santo || '-'}</Text>
+              <Text>__________________________________</Text>
               <Text>Sexo: {membros?.sexo}</Text>
           </Card>
       </View>
