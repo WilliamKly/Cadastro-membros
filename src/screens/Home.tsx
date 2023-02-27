@@ -214,7 +214,7 @@ export function Home() {
     <VStack flex={1}>
       <HomeHeader />
 
-      <VStack flex={1} mt={50} px={8}>
+      <VStack flex={1} mt={4} px={8}>
         <HStack justifyContent='space-between' mb={5}>
           <Heading color='gray.200' fontSize='md' fontFamily='heading'>
             Cadastrar um novo membro
@@ -222,7 +222,7 @@ export function Home() {
         </HStack>
         <KeyboardAvoidingView
           behavior='padding'
-          keyboardVerticalOffset={150}
+          keyboardVerticalOffset={5}
           style={{ flex: 1 }}>
         <ScrollView>
 
