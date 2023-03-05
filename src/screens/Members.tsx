@@ -48,8 +48,6 @@ interface ApiResponse {
 
 export function Members() {
   const [membros, setMembros] = useState<ApiResponse>()
-  //const [page, setPage] = useState(1);
-  //const [params, setParams] = useState({page: 1})
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false)
   const [searchTerm, setSearchTerm] = useState('');
@@ -57,43 +55,46 @@ export function Members() {
   
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
-  
-
-  const handleSearch = async () => {
-    const response = await api.get(`/api/membros/find?nome=${searchTerm}`)
-    const data = await response.data.Membros;
-    setMembros(data)
-    setHasMore(false)
+  const fetchMembros = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get(`/api/membros/all`);
+      const data = await response.data;
+      setMembros(data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
   };
 
-  // const handleLoadMore = () => {
-  //   if (!refresh && hasMore) {
-  //     setPage(page + 1);
-  //   }
-  // };
+  useEffect(() => {
+    fetchMembros();
+  }, []);
+
+  const handleSearch = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get(`/api/membros/find?nome=${searchTerm}`);
+      const data = await response.data.Membros;
+      setMembros(data);
+      setHasMore(false);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
+  const handleRefresh = async () => {
+    setRefresh(true);
+    await fetchMembros();
+    setRefresh(false);
+  };
 
   const handleMemberPress = (memberId: string) => {
     navigation.navigate('memberDetails', {memberId});
   };
-
-  useEffect(() => {
-    async function fetchMembros() {
-      try {
-        setIsLoading(true)
-        setRefresh(true)
-        const response = await api.get(`/api/membros/all`)
-        const data = await response.data;
-        setMembros(data)
-        //setMembros({ ...data, data: [...membros?.data ?? [], ...data.data] });
-        setIsLoading(false)
-        setRefresh(false)
-      } catch(error) {
-        setIsLoading(false)
-        console.log(error)
-      }
-    }
-    fetchMembros()
-  }, [membros])
 
   return (
     <VStack flex={1}>
@@ -118,38 +119,45 @@ export function Members() {
             style={{ marginLeft: 5 }}
           />
         }
-/>
+      />
 
-    <FlatList
-      data={membros?.Membros?.filter(item => item?.nome_membro?.includes(searchTerm)) ?? []}
-      renderItem={({ item, index }) => (
-        <MyCard
-          key={item?.id}
-          id={item?.id}
-          barrio={item?.barrio}
-          nome_membro={item?.nome_membro}
-          onPress={() => handleMemberPress(item.id.toString())}
-          />
-          // <Text color='white'>{item.nome_membro}</Text>
-      )}
-      keyExtractor={(item) => item?.id?.toString()}
-      refreshControl={
-        <RefreshControl
-          refreshing={refresh}
-          onRefresh={() => refresh}
-          tintColor='white'
-          colors={['white']}
+      <FlatList
+          data={membros?.Membros?.filter(item => item?.nome_membro?.includes(searchTerm)) ?? []}
+          renderItem={({ item, index }) => (
+            <MyCard
+              key={item?.id}
+              id={item?.id}
+              barrio={item.barrio}
+              nome_membro={item.nome_membro}
+              onPress={() => handleMemberPress(item.id.toString())}
+              />
+              // <Text color='white'>{item.nome_membro}</Text>
+          )}
+        ListEmptyComponent={
+        isLoading ? (
+        <View  flex={1} justifyContent="center" alignItems="center">
+        <ActivityIndicator size="large" color="blue.500" />
+        </View>
+        ) : (
+        <View flex={1} justifyContent="center" alignItems="center">
+        <Ionicons
+                     name="person-circle-outline"
+                     size={100}
+                     color="gray"
+                   />
+        </View>
+        )
+        }
+        refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+        }
+        onEndReached={() => {
+        if (hasMore) {
+        // Lógica para buscar mais membros, caso existam
+        }
+        }}
+        onEndReachedThreshold={0.3}
         />
-      }
-      // onEndReached={() => {
-      //   if (hasMore && !refresh) {
-      //     handleLoadMore();
-      //   }
-      // }}
-      // onEndReachedThreshold={0.5}
-      // ListFooterComponent={() => refresh ? <ActivityIndicator style={{ marginVertical: 20 }} /> : <View style={{height: 50}} />}
-    />
-
-    </VStack>
-  )
-}
+        </VStack>
+        );
+        }
