@@ -57,21 +57,7 @@ export function Members() {
   
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
-  async function fetchMembros() {
-    try {
-      setIsLoading(true)
-      setRefresh(true)
-      const response = await api.get(`/api/membros/all`)
-      const data = await response.data;
-      setMembros(data)
-      //setMembros({ ...data, data: [...membros?.data ?? [], ...data.data] });
-      setIsLoading(false)
-      setRefresh(false)
-    } catch(error) {
-      setIsLoading(false)
-      console.log(error)
-    }
-  }
+  
 
   const handleSearch = async () => {
     const response = await api.get(`/api/membros/find?nome=${searchTerm}`)
@@ -91,32 +77,47 @@ export function Members() {
   };
 
   useEffect(() => {
+    async function fetchMembros() {
+      try {
+        setIsLoading(true)
+        setRefresh(true)
+        const response = await api.get(`/api/membros/all`)
+        const data = await response.data;
+        setMembros(data)
+        //setMembros({ ...data, data: [...membros?.data ?? [], ...data.data] });
+        setIsLoading(false)
+        setRefresh(false)
+      } catch(error) {
+        setIsLoading(false)
+        console.log(error)
+      }
+    }
     fetchMembros()
-  }, [])
+  }, [membros])
 
   return (
     <VStack flex={1}>
       <ScreenHeader title='Membros cadastrados' />
 
       <Input
-  value={searchTerm}
-  onChangeText={text => setSearchTerm(text)}
-  onSubmitEditing={handleSearch}
-  placeholder="Buscar por nome"
-  h={58}
-  px={2}
-  mb={0}
-  mt={2}
-  mx={4}
-  borderWidth={2}
-  InputLeftElement={
-    <Ionicons
-      name="search-outline"
-      size={24}
-      color="gray"
-      style={{ marginLeft: 5 }}
-    />
-  }
+        value={searchTerm}
+        onChangeText={text => setSearchTerm(text)}
+        onSubmitEditing={handleSearch}
+        placeholder="Buscar por nome"
+        h={58}
+        px={2}
+        mb={0}
+        mt={2}
+        mx={4}
+        borderWidth={2}
+        InputLeftElement={
+          <Ionicons
+            name="search-outline"
+            size={24}
+            color="gray"
+            style={{ marginLeft: 5 }}
+          />
+        }
 />
 
     <FlatList
