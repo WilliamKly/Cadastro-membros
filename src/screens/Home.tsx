@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { HomeHeader } from "@components/HomeHeader";
-import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton } from "native-base";
+import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton, usePlatformProps } from "native-base";
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
@@ -15,6 +15,7 @@ import { TouchableOpacity } from 'react-native'
 import { UserPhoto } from '@components/UserPhoto';
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
+import { useAuth } from '@hooks/useAuth';
 
 type FormData = {
   nome_membro: string;
@@ -30,7 +31,6 @@ type FormData = {
   fk_igreja: number;
   data_batismo_espirito_santo: string;
   sexo: string;
-  image?: string;
 }
 
 interface Cargo {
@@ -72,6 +72,8 @@ export function Home() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png')
 
+  const { user } = useAuth()
+
   async function handleUsePhotoSelect() {
     setPhotoIsLoading(true)
     try{
@@ -97,8 +99,31 @@ export function Home() {
             bgColor: 'red.500'
           })
         }
+        
+        const fileExtension = photoSelected.uri?.split('.').pop()
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLocaleLowerCase(),
+          uri: photoSelected.uri,
+          type: `${photoSelected.type}/${fileExtension}`
+        } as any
 
-        setUserPhoto(photoSelected.assets[0].uri)
+        const userPhotoUploadForm = new FormData()
+        userPhotoUploadForm.append('file', photoFile)
+
+        await api.post('/api/membros/create', userPhotoUploadForm, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        toast.show({
+          title: 'Foto atualizada!',
+          placement: 'top',
+          bgColor: 'green.400'
+        })
+
+        console.log('photoFile', photoFile)
+        //setUserPhoto(photoSelected.assets[0].uri)
       }
   
     } catch(err) {
@@ -144,13 +169,12 @@ export function Home() {
     fk_igreja,
     data_batismo_espirito_santo,
     sexo,
-    image
    }: FormData) {
     try {
       setIsLoading(true)
 
-      const base64Photo = await FileSystem.readAsStringAsync(userPhoto, { encoding: FileSystem.EncodingType.Base64 });
-
+      //const base64Photo = await FileSystem.readAsStringAsync(userPhoto, { encoding: FileSystem.EncodingType.Base64 });
+      
       await api.post('/api/membros/create', {
         nome_membro,
         email_dizimista,
@@ -165,7 +189,6 @@ export function Home() {
         fk_igreja: selectedIgreja,
         data_batismo_espirito_santo,
         sexo,
-        image: base64Photo.toString()
       })
 
       const title = "Membro Cadastrado com sucesso!"
