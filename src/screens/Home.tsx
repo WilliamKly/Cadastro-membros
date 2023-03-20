@@ -71,6 +71,7 @@ export function Home() {
   const [selectedTypeIdIgreja, setSelectedTypeIdIgreja] = useState("");
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png')
+  const [saveIdMember, setSaveIdMember] = useState()
 
   const { user } = useAuth()
 
@@ -110,7 +111,7 @@ export function Home() {
         const userPhotoUploadForm = new FormData()
         userPhotoUploadForm.append('file', photoFile)
 
-        await api.post('/api/membros/create', userPhotoUploadForm, {
+        await api.post(`/api/membros/create/perfil/${saveIdMember}`, userPhotoUploadForm, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -175,7 +176,7 @@ export function Home() {
 
       //const base64Photo = await FileSystem.readAsStringAsync(userPhoto, { encoding: FileSystem.EncodingType.Base64 });
       
-      await api.post('/api/membros/create', {
+      const res = await api.post('/api/membros/create', {
         nome_membro,
         email_dizimista,
         cidade,
@@ -190,6 +191,7 @@ export function Home() {
         data_batismo_espirito_santo,
         sexo,
       })
+      setSaveIdMember(res.data.Membro.id)
 
       const title = "Membro Cadastrado com sucesso!"
 
