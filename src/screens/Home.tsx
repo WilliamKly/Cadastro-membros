@@ -72,6 +72,7 @@ export function Home() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png')
   const [saveIdMember, setSaveIdMember] = useState()
+  const [photo, setPhoto] = useState<any>()
 
   const { user } = useAuth()
 
@@ -111,20 +112,15 @@ export function Home() {
         const userPhotoUploadForm = new FormData()
         userPhotoUploadForm.append('file', photoFile)
 
-        await api.post(`/api/membros/create/perfil/${saveIdMember}`, userPhotoUploadForm, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-
-        toast.show({
-          title: 'Foto atualizada!',
-          placement: 'top',
-          bgColor: 'green.400'
-        })
+        // toast.show({
+        //   title: 'Foto atualizada!',
+        //   placement: 'top',
+        //   bgColor: 'green.400'
+        // })
 
         console.log('photoFile', photoFile)
-        //setUserPhoto(photoSelected.assets[0].uri)
+        setPhoto(userPhotoUploadForm)
+        setUserPhoto(photoSelected.assets[0].uri)
       }
   
     } catch(err) {
@@ -175,7 +171,7 @@ export function Home() {
       setIsLoading(true)
 
       //const base64Photo = await FileSystem.readAsStringAsync(userPhoto, { encoding: FileSystem.EncodingType.Base64 });
-      
+      console.log('user photo', userPhoto)
       const res = await api.post('/api/membros/create', {
         nome_membro,
         email_dizimista,
@@ -192,6 +188,13 @@ export function Home() {
         sexo,
       })
       setSaveIdMember(res.data.Membro.id)
+      const id = await res?.data?.Membro?.id
+
+      await api.post(`/api/membros/create/perfil/${id}`, photo, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
 
       const title = "Membro Cadastrado com sucesso!"
 
