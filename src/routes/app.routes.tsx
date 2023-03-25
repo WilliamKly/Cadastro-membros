@@ -7,6 +7,7 @@ import HistorySvg from '@assets/history.svg'
 import { Members } from '@screens/Members'
 import { Home } from '@screens/Home'
 import { MemberDetails } from '@screens/MemberDetails'
+import { Dashboard } from '@screens/Dashboard'
 
 type AppRoutes = {
   home: undefined;
@@ -39,6 +40,8 @@ export function AppRoutes() {
         paddingTop: sizes[6]
       }
     }}>
+
+      
       <Screen
         name='home'
         component={Home}
@@ -62,6 +65,7 @@ export function AppRoutes() {
         component={MemberDetails}
         options={{ tabBarButton: () => null }}
       />
+    
     </Navigator>
   )
 }

@@ -295,6 +295,7 @@ export function Home() {
             rules={{ required: 'Informe o nome' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Nome Completo'
               onChangeText={onChange}
               errorMessage={errors.nome_membro?.message}
@@ -308,6 +309,7 @@ export function Home() {
             rules={{ required: 'Informe o e-mail' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='E-mail'
               onChangeText={onChange}
               errorMessage={errors.email_dizimista?.message}
@@ -322,6 +324,7 @@ export function Home() {
             rules={{ required: 'Informe a cidade' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Cidade'
               onChangeText={onChange}
               errorMessage={errors.cidade?.message}
@@ -335,6 +338,7 @@ export function Home() {
             rules={{ required: 'Informe o bairro' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Bairro'
               onChangeText={onChange}
               errorMessage={errors.barrio?.message}
@@ -348,6 +352,7 @@ export function Home() {
             rules={{ required: 'Informe o endereço' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Endereço'
               onChangeText={onChange}
               errorMessage={errors.endereco?.message}
@@ -362,6 +367,7 @@ export function Home() {
             rules={{ required: 'Informe o número do telefone' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Telefone - (00) 00000-0000'
               onChangeText={onChange}
               errorMessage={errors.telefone?.message}
@@ -375,6 +381,7 @@ export function Home() {
             rules={{ required: 'Informe a data do batismo' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Data de Batismo nas águas'
               onChangeText={onChange}
               errorMessage={errors.batismo_agua?.message}
@@ -388,6 +395,7 @@ export function Home() {
             rules={{ required: 'Informe a data de nascimento' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Data de nascimento'
               onChangeText={onChange}
               errorMessage={errors.data_nascimento?.message}
@@ -400,6 +408,7 @@ export function Home() {
             name='data_batismo_espirito_santo'
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Data do batismo no ES'
               onChangeText={onChange}
               errorMessage={errors.data_batismo_espirito_santo?.message}
@@ -417,7 +426,7 @@ export function Home() {
           px={4}
           mb={15}
           borderWidth={2}
-          fontSize='md'
+          style={styles.text}
           color='gray.900'
           fontFamily='body'
         >
@@ -431,6 +440,7 @@ export function Home() {
             name='situacao'
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Situação do membro'
               onChangeText={onChange}
               errorMessage={errors.situacao?.message}
@@ -448,7 +458,7 @@ export function Home() {
           px={4}
           mb={15}
           borderWidth={2}
-          fontSize='md'
+          style={styles.text}
           color='gray.900'
           fontFamily='body'
         >
@@ -458,10 +468,12 @@ export function Home() {
         </Select>
 
         <Controller
+            
             control={control}
             name='sexo'
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Sexo'
               onChangeText={onChange}
               errorMessage={errors.sexo?.message}
@@ -471,6 +483,7 @@ export function Home() {
 
         
         <Button
+            
             title='Cadastrar membro'
             onPress={handleSubmit(handleCreate)}
             isLoading={isLoading}
@@ -494,6 +507,7 @@ const styles = StyleSheet.create({
     marginVertical: 1,
     marginHorizontal: 1,
     shadowColor: '#000',
+    fontSize: 12,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -513,4 +527,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#dcdcdc',  
   },
+
+  text:{
+    fontSize: 10,
+  }
 });
