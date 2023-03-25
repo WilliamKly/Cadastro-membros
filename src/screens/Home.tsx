@@ -60,6 +60,8 @@ const signUpSchema = yup.object({
 const PHOTO_SIZE = 33
 
 export function Home() {
+
+
   const [isLoading, setIsLoading] = useState(false)
 
   const toast = useToast()
