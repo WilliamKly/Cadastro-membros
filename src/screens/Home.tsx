@@ -1,7 +1,8 @@
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useCallback, useState ,} from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { ActivityIndicator, StyleSheet } from "react-native";
 import { HomeHeader } from "@components/HomeHeader";
-import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton, usePlatformProps } from "native-base";
+import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton, usePlatformProps, Card, View } from "native-base";
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
@@ -75,7 +76,7 @@ export function Home() {
   const [photo, setPhoto] = useState<any>()
 
   const { user } = useAuth()
-
+  const [loading, setLoading] = useState(false);
   async function handleUsePhotoSelect() {
     setPhotoIsLoading(true)
     try{
@@ -196,14 +197,16 @@ export function Home() {
         }
       })
 
-      const title = "Membro Cadastrado com sucesso!"
-
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'green.800'
-      })
       
+      const message = "Membro cadastrado com sucesso!";
+      toast.show({
+        title: message,
+        bgColor: 'green.800',
+        placement: 'top',
+        duration: 9000,
+      });
+    
+
       setIsLoading(false)
       reset()
     } catch(error) {
@@ -239,7 +242,11 @@ export function Home() {
   const typesIgrejas = igrejas?.Igrejas.map(item => ({ label: item.nome_igreja, value: item.id.toString() }));
 
   return (
+
+    
     <VStack flex={1}>
+
+      
       <HomeHeader />
 
       <VStack flex={1} mt={4} px={8}>
@@ -253,9 +260,12 @@ export function Home() {
           keyboardVerticalOffset={5}
           style={{ flex: 1 }}>
         <ScrollView>
+          
+    <Card style={styles.cardLista}>
 
         <Center mt={6} px={10}>
           {
+            
             photoIsLoading ?
             <Skeleton
               w={PHOTO_SIZE}
@@ -271,9 +281,10 @@ export function Home() {
               size={PHOTO_SIZE}
             />
           }
+          
 
           <TouchableOpacity onPress={handleUsePhotoSelect}>
-            <Text color='white' fontWeight='bold' fontSize='md' mt={2} mb={8}>
+            <Text color='black' fontWeight='bold' fontSize='md' mt={2} mb={8}>
               Escolher foto do membro
             </Text>
           </TouchableOpacity>
@@ -464,7 +475,10 @@ export function Home() {
             title='Cadastrar membro'
             onPress={handleSubmit(handleCreate)}
             isLoading={isLoading}
+            h={12}
           />
+
+</Card>
         
         </ScrollView>
         </KeyboardAvoidingView>
@@ -473,3 +487,31 @@ export function Home() {
     </VStack>
   )
 }
+
+const styles = StyleSheet.create({
+  card: {
+    padding: 0,
+    margin: 0,
+    marginVertical: 1,
+    marginHorizontal: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+
+  cardLista: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    margin:58,
+    marginVertical: 2,
+    marginHorizontal: 1,
+    borderWidth: 1,
+    borderColor: '#dcdcdc',  
+  },
+});

@@ -284,7 +284,7 @@ export function MemberDetails() {
             </VStack>
           </Card>
  
-      <Button title="Excluir membro" onPress={() => onExcluirMembro(memberId)} />
+      <Button title="Excluir membro" h={12} onPress={() => onExcluirMembro(memberId)} />
           </VStack>
         </ScrollView>
       }

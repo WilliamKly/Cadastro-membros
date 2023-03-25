@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ScreenHeader } from "@components/ScreenHeader";
-import { RefreshControl, ActivityIndicator} from 'react-native'
+import { RefreshControl,StyleSheet, ActivityIndicator} from 'react-native'
 import {  VStack, FlatList, View } from "native-base";
 import { api } from '@services/api';
 import { MyCard } from '@components/Card';
@@ -101,15 +101,16 @@ export function Members() {
       <ScreenHeader title='Membros cadastrados' />
 
       <Input
+        style={styles.card}
         value={searchTerm}
         onChangeText={text => setSearchTerm(text)}
         onSubmitEditing={handleSearch}
         placeholder="Buscar por nome"
         h={58}
         px={2}
+        mx={4}
         mb={0}
         mt={2}
-        mx={4}
         borderWidth={2}
         InputLeftElement={
           <Ionicons
@@ -122,9 +123,11 @@ export function Members() {
       />
 
       <FlatList
+          style={styles.cardLista}
           data={membros?.Membros?.filter(item => item?.nome_membro?.includes(searchTerm)) ?? []}
           renderItem={({ item, index }) => (
             <MyCard
+              style={styles.card}
               key={item?.id}
               id={item?.id}
               barrio={item.barrio}
@@ -162,3 +165,35 @@ export function Members() {
         </VStack>
         );
         }
+
+
+        const styles = StyleSheet.create({
+          card: {
+            height:65,
+            padding: 2,
+            shadowColor: '#000',
+            color:'#808080',    
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+        
+            elevation: 5,
+          },
+        
+          cardLista: {
+            backgroundColor: 'white',
+            borderRadius: 8,
+            margin:58,
+            marginVertical: 2,
+            marginHorizontal: 29,
+            borderWidth: 1,
+            borderColor: '#dcdcdc', 
+            color:'#808080',     
+          },
+        });
+
+
+        
