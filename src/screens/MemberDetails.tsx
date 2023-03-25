@@ -114,7 +114,11 @@ export function MemberDetails() {
         placement: 'top',
         bgColor: 'red.500'
       })
+    }finally {
+      setIsLoading(false)
+      navigation.navigate('members');
     }
+
 
   }
   
@@ -151,6 +155,7 @@ export function MemberDetails() {
       });
     } finally {
       setIsImageLoading(false);
+     
     }
   };
   
@@ -166,6 +171,7 @@ export function MemberDetails() {
   useEffect(() => {
     if (membros) {
       fetchExerciseDetailsFoto();
+
     }
   }, [membros]);
   

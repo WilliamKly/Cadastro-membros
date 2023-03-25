@@ -23,9 +23,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    padding: 16,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    // marginVertical: 8,
+    marginHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -37,10 +36,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   name: {
-    fontSize: 20,
+    fontSize: 10,
   },
   bairro: {
-    fontSize: 14,
+    fontSize: 8,
     color: '#555',
   },
 });

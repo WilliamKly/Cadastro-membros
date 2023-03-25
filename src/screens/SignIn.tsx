@@ -96,6 +96,8 @@ export function SignIn() {
           <Button
             title='Acessar'
             onPress={handleSubmit(handleSignIn)}
+            h={12}
+            w={313}
             isLoading={isLoading}
           />
         </Center>

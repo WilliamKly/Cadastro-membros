@@ -256,12 +256,11 @@ export function Home() {
           </Heading>
         </HStack>
         <KeyboardAvoidingView
-          behavior='padding'
           keyboardVerticalOffset={5}
           style={{ flex: 1 }}>
         <ScrollView>
           
-    <Card style={styles.cardLista}>
+    <Card flex={1} style={styles.cardLista}>
 
         <Center mt={6} px={10}>
           {

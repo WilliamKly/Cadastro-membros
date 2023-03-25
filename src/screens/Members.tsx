@@ -101,7 +101,6 @@ export function Members() {
       <ScreenHeader title='Membros cadastrados' />
 
       <Input
-        style={styles.card}
         value={searchTerm}
         onChangeText={text => setSearchTerm(text)}
         onSubmitEditing={handleSearch}
@@ -111,6 +110,7 @@ export function Members() {
         mx={4}
         mb={0}
         mt={2}
+        fontSize={10}
         borderWidth={2}
         InputLeftElement={
           <Ionicons
@@ -160,7 +160,7 @@ export function Members() {
             }
           }
         }
-        onEndReachedThreshold={0.50}
+        onEndReachedThreshold={0.3}
         />
         </VStack>
         );
@@ -169,9 +169,11 @@ export function Members() {
 
         const styles = StyleSheet.create({
           card: {
-            height:65,
-            padding: 2,
+            // height:70,
+            fontSize:8,
+            padding: 0,
             shadowColor: '#000',
+            marginVertical: 5,
             color:'#808080',    
             shadowOffset: {
               width: 0,
@@ -184,6 +186,7 @@ export function Members() {
           },
         
           cardLista: {
+            fontSize:8,
             backgroundColor: 'white',
             borderRadius: 8,
             margin:58,

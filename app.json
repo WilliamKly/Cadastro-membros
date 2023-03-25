@@ -27,7 +27,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "isaelsilva1039"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,19 +38,19 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.willkly.igrejacad"
+      "package": "com.isaelsilva1039"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "8e3302f9-441e-4c38-a8bd-76d3d84b07ea"
-      }
-    },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
-    "owner": "willklywerston"
+    "owner": "isaelsilva1039",
+    "extra": {
+      "eas": {
+        "projectId": "4ef4a715-cc22-405e-a27c-65aa21953238"
+      }
+    }
   }
 }
