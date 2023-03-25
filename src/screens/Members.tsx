@@ -136,11 +136,11 @@ export function Members() {
         ListEmptyComponent={
         isLoading ? (
         <View  flex={1} justifyContent="center" alignItems="center">
-        <ActivityIndicator size="large" color="blue.500" />
+           <ActivityIndicator size="large" color="blue.500" />
         </View>
         ) : (
-        <View flex={1} justifyContent="center" alignItems="center">
-        <Ionicons
+          <View flex={1} justifyContent="center" alignItems="center">
+          <Ionicons
                      name="person-circle-outline"
                      size={100}
                      color="gray"
@@ -148,15 +148,16 @@ export function Members() {
         </View>
         )
         }
-        refreshControl={
-        <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+          }
+          onEndReached={() => {
+            if (hasMore) {
+              // Lógica para buscar mais membros, caso existam
+            }
+          }
         }
-        onEndReached={() => {
-        if (hasMore) {
-        // Lógica para buscar mais membros, caso existam
-        }
-        }}
-        onEndReachedThreshold={0.3}
+        onEndReachedThreshold={0.50}
         />
         </VStack>
         );
