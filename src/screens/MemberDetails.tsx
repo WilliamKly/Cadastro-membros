@@ -87,6 +87,26 @@ export function MemberDetails() {
     }
   }
 
+  async function getImage() {
+    try {
+      setIsLoading(true)
+      const response = await api.get(`/api/membros/perfil/${memberId}`)
+      setMembros(response.data)
+      navigation.navigate('members')
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError ? error.mensagem : 'Não foi possível carregar os detalhes do exercício.'
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500'
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   async function onExcluirMembro(memberId: string) {
     try {
       setIsLoading(true)
