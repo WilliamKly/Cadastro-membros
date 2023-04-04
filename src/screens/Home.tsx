@@ -53,8 +53,7 @@ export interface ResponseIgrejas {
 }
 
 const signUpSchema = yup.object({
-  nome_membro: yup.string().required('Informe o nome.'),
-  email_dizimista: yup.string().required('Informe o e-mail.').email('E-mail inválido.'),
+  nome_membro: yup.string().required('Informe o nome.')
 })
 
 const PHOTO_SIZE = 33
@@ -308,7 +307,6 @@ export function Home() {
         <Controller
             control={control}
             name='email_dizimista'
-            rules={{ required: 'Informe o e-mail' }}
             render={({ field: { onChange } }) => (
               <Input
               style={styles.text}
