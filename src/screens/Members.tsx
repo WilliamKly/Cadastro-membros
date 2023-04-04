@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ScreenHeader } from "@components/ScreenHeader";
-import { RefreshControl, ActivityIndicator} from 'react-native'
+import { RefreshControl,StyleSheet, ActivityIndicator} from 'react-native'
 import {  VStack, FlatList, View } from "native-base";
 import { api } from '@services/api';
 import { MyCard } from '@components/Card';
@@ -107,9 +107,10 @@ export function Members() {
         placeholder="Buscar por nome"
         h={58}
         px={2}
+        mx={4}
         mb={0}
         mt={2}
-        mx={4}
+        fontSize={10}
         borderWidth={2}
         InputLeftElement={
           <Ionicons
@@ -122,9 +123,11 @@ export function Members() {
       />
 
       <FlatList
+          style={styles.cardLista}
           data={membros?.Membros?.filter(item => item?.nome_membro?.includes(searchTerm)) ?? []}
           renderItem={({ item, index }) => (
             <MyCard
+              style={styles.card}
               key={item?.id}
               id={item?.id}
               barrio={item.barrio}
@@ -136,11 +139,11 @@ export function Members() {
         ListEmptyComponent={
         isLoading ? (
         <View  flex={1} justifyContent="center" alignItems="center">
-        <ActivityIndicator size="large" color="blue.500" />
+           <ActivityIndicator size="large" color="blue.500" />
         </View>
         ) : (
-        <View flex={1} justifyContent="center" alignItems="center">
-        <Ionicons
+          <View flex={1} justifyContent="center" alignItems="center">
+          <Ionicons
                      name="person-circle-outline"
                      size={100}
                      color="gray"
@@ -148,16 +151,52 @@ export function Members() {
         </View>
         )
         }
-        refreshControl={
-        <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+          }
+          onEndReached={() => {
+            if (hasMore) {
+              // Lógica para buscar mais membros, caso existam
+            }
+          }
         }
-        onEndReached={() => {
-        if (hasMore) {
-        // Lógica para buscar mais membros, caso existam
-        }
-        }}
         onEndReachedThreshold={0.3}
         />
         </VStack>
         );
         }
+
+
+        const styles = StyleSheet.create({
+          card: {
+            // height:70,
+            fontSize:8,
+            padding: 0,
+            shadowColor: '#000',
+            marginVertical: 5,
+            color:'#808080',    
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+        
+            elevation: 5,
+          },
+        
+          cardLista: {
+            fontSize:8,
+            backgroundColor: 'white',
+            borderRadius: 8,
+            margin:58,
+            marginVertical: 2,
+            marginHorizontal: 29,
+            borderWidth: 1,
+            borderColor: '#dcdcdc', 
+            color:'#808080',     
+          },
+        });
+
+
+        

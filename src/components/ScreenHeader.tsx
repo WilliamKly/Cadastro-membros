@@ -6,8 +6,8 @@ type Props = {
 
 export function ScreenHeader({ title }: Props) {
   return (
-    <Center bg='gray.600' pb={6} pt={16}>
-      <Heading color='gray.100' fontSize='xl' fontFamily='heading'>
+    <Center bg='gray.600' pb={6} pt={10}>
+      <Heading color='gray.100' fontSize={12} fontFamily='heading'>
         {title}
       </Heading>
     </Center>

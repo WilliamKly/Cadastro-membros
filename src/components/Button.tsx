@@ -9,7 +9,7 @@ export function Button({ title, variant = 'solid', ...rest }: Props) {
   return (
     <ButtonNativeBase
       w='full'
-      h={14}
+      h={8}
       bg={variant === 'outline' ? 'transparent' : 'green.700'}
       borderWidth={variant === 'outline' ? 1 : 0}
       borderColor='green.500'

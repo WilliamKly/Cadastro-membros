@@ -1,7 +1,8 @@
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useCallback, useState ,} from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { ActivityIndicator, StyleSheet } from "react-native";
 import { HomeHeader } from "@components/HomeHeader";
-import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton, usePlatformProps } from "native-base";
+import { VStack, HStack, Heading, Text, useToast, ScrollView, Select, Center, Skeleton, usePlatformProps, Card, View } from "native-base";
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
@@ -59,6 +60,8 @@ const signUpSchema = yup.object({
 const PHOTO_SIZE = 33
 
 export function Home() {
+
+
   const [isLoading, setIsLoading] = useState(false)
 
   const toast = useToast()
@@ -75,7 +78,7 @@ export function Home() {
   const [photo, setPhoto] = useState<any>()
 
   const { user } = useAuth()
-
+  const [loading, setLoading] = useState(false);
   async function handleUsePhotoSelect() {
     setPhotoIsLoading(true)
     try{
@@ -196,14 +199,16 @@ export function Home() {
         }
       })
 
-      const title = "Membro Cadastrado com sucesso!"
-
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'green.800'
-      })
       
+      const message = "Membro cadastrado com sucesso!";
+      toast.show({
+        title: message,
+        bgColor: 'green.800',
+        placement: 'top',
+        duration: 9000,
+      });
+    
+
       setIsLoading(false)
       reset()
     } catch(error) {
@@ -239,7 +244,11 @@ export function Home() {
   const typesIgrejas = igrejas?.Igrejas.map(item => ({ label: item.nome_igreja, value: item.id.toString() }));
 
   return (
+
+    
     <VStack flex={1}>
+
+      
       <HomeHeader />
 
       <VStack flex={1} mt={4} px={8}>
@@ -249,13 +258,15 @@ export function Home() {
           </Heading>
         </HStack>
         <KeyboardAvoidingView
-          behavior='padding'
           keyboardVerticalOffset={5}
           style={{ flex: 1 }}>
         <ScrollView>
+          
+    <Card flex={1} style={styles.cardLista}>
 
         <Center mt={6} px={10}>
           {
+            
             photoIsLoading ?
             <Skeleton
               w={PHOTO_SIZE}
@@ -271,9 +282,10 @@ export function Home() {
               size={PHOTO_SIZE}
             />
           }
+          
 
           <TouchableOpacity onPress={handleUsePhotoSelect}>
-            <Text color='white' fontWeight='bold' fontSize='md' mt={2} mb={8}>
+            <Text color='black' fontWeight='bold' fontSize='md' mt={2} mb={8}>
               Escolher foto do membro
             </Text>
           </TouchableOpacity>
@@ -285,6 +297,7 @@ export function Home() {
             rules={{ required: 'Informe o nome' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Nome Completo'
               onChangeText={onChange}
               errorMessage={errors.nome_membro?.message}
@@ -298,6 +311,7 @@ export function Home() {
             rules={{ required: 'Informe o e-mail' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='E-mail'
               onChangeText={onChange}
               errorMessage={errors.email_dizimista?.message}
@@ -312,6 +326,7 @@ export function Home() {
             rules={{ required: 'Informe a cidade' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Cidade'
               onChangeText={onChange}
               errorMessage={errors.cidade?.message}
@@ -325,6 +340,7 @@ export function Home() {
             rules={{ required: 'Informe o bairro' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Bairro'
               onChangeText={onChange}
               errorMessage={errors.barrio?.message}
@@ -338,6 +354,7 @@ export function Home() {
             rules={{ required: 'Informe o endereço' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Endereço'
               onChangeText={onChange}
               errorMessage={errors.endereco?.message}
@@ -352,6 +369,7 @@ export function Home() {
             rules={{ required: 'Informe o número do telefone' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Telefone - (00) 00000-0000'
               onChangeText={onChange}
               errorMessage={errors.telefone?.message}
@@ -365,6 +383,7 @@ export function Home() {
             rules={{ required: 'Informe a data do batismo' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Data de Batismo nas águas'
               onChangeText={onChange}
               errorMessage={errors.batismo_agua?.message}
@@ -378,6 +397,7 @@ export function Home() {
             rules={{ required: 'Informe a data de nascimento' }}
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Data de nascimento'
               onChangeText={onChange}
               errorMessage={errors.data_nascimento?.message}
@@ -390,6 +410,7 @@ export function Home() {
             name='data_batismo_espirito_santo'
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Data do batismo no ES'
               onChangeText={onChange}
               errorMessage={errors.data_batismo_espirito_santo?.message}
@@ -407,7 +428,7 @@ export function Home() {
           px={4}
           mb={15}
           borderWidth={2}
-          fontSize='md'
+          style={styles.text}
           color='gray.900'
           fontFamily='body'
         >
@@ -421,6 +442,7 @@ export function Home() {
             name='situacao'
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Situação do membro'
               onChangeText={onChange}
               errorMessage={errors.situacao?.message}
@@ -438,7 +460,7 @@ export function Home() {
           px={4}
           mb={15}
           borderWidth={2}
-          fontSize='md'
+          style={styles.text}
           color='gray.900'
           fontFamily='body'
         >
@@ -448,10 +470,12 @@ export function Home() {
         </Select>
 
         <Controller
+            
             control={control}
             name='sexo'
             render={({ field: { onChange } }) => (
               <Input
+              style={styles.text}
               placeholder='Sexo'
               onChangeText={onChange}
               errorMessage={errors.sexo?.message}
@@ -461,10 +485,14 @@ export function Home() {
 
         
         <Button
+            
             title='Cadastrar membro'
             onPress={handleSubmit(handleCreate)}
             isLoading={isLoading}
+            h={12}
           />
+
+</Card>
         
         </ScrollView>
         </KeyboardAvoidingView>
@@ -473,3 +501,36 @@ export function Home() {
     </VStack>
   )
 }
+
+const styles = StyleSheet.create({
+  card: {
+    padding: 0,
+    margin: 0,
+    marginVertical: 1,
+    marginHorizontal: 1,
+    shadowColor: '#000',
+    fontSize: 12,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+
+  cardLista: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    margin:58,
+    marginVertical: 2,
+    marginHorizontal: 1,
+    borderWidth: 1,
+    borderColor: '#dcdcdc',  
+  },
+
+  text:{
+    fontSize: 10,
+  }
+});
