@@ -1,5 +1,5 @@
-import { Platform } from 'react-native'
-import { useTheme } from 'native-base'
+import { Platform,StyleSheet } from 'react-native'
+import { Icon, useTheme } from 'native-base'
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 
 import HomeSvg from '@assets/home.svg'
@@ -8,12 +8,17 @@ import { Members } from '@screens/Members'
 import { Home } from '@screens/Home'
 import { MemberDetails } from '@screens/MemberDetails'
 import { Dashboard } from '@screens/Dashboard'
+import { MaterialIcons } from '@expo/vector-icons'
+
+
+
 
 type AppRoutes = {
   home: undefined;
   memberDetails: {memberId: string};
   profile: undefined;
   members: undefined;
+  dashboard :undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
@@ -41,6 +46,7 @@ export function AppRoutes() {
       }
     }}>
 
+    
       
       <Screen
         name='home'
@@ -51,6 +57,26 @@ export function AppRoutes() {
           )
         }}
       />
+
+      <Screen
+        
+        name='dashboard'
+        component={Dashboard}
+        options={{
+          tabBarIcon: ({ color }) => (
+           <Icon
+              fill={color} 
+              width={iconSize} 
+              height={iconSize}
+              as={MaterialIcons}
+              name='dashboard'
+              color='gray.200'
+              size={6}
+           />
+          )
+        }}
+      />
+
       <Screen
         name='members'
         component={Members}
@@ -69,3 +95,8 @@ export function AppRoutes() {
     </Navigator>
   )
 }
+
+
+const styles = StyleSheet.create({
+ 
+});
